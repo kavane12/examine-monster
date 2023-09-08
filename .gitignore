@@ -6,7 +6,8 @@ build
 .settings/
 .classpath
 .vscode
-eclipse-formatter.xml
+bin
 nbactions.xml
 nb-configuration.xml
 nbproject/
+exclipse-formatter.xml
