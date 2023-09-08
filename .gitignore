@@ -1,9 +1,12 @@
 .gradle
+bin
 build
 .idea/
 .project
 .settings/
 .classpath
+.vscode
+eclipse-formatter.xml
 nbactions.xml
 nb-configuration.xml
 nbproject/
