@@ -2,6 +2,8 @@ package com.examine_monster.common;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonObject;
@@ -26,7 +28,7 @@ public class Monster
     int combatLevel;
     int attackSpeed;
     int maxHit;
-    List<String> attackTypes;
+    List<String> attackStyles;
     List<String> attributes;
     boolean aggressive;
     boolean poisonous;
@@ -62,6 +64,7 @@ public class Monster
 
     public Monster(JsonObject monsterJson, List<JsonObject> itemsJson)
     {
+        log.info("Creating Monster");
         try (JsonReader reader = new JsonReader(new StringReader(monsterJson.toString())))
         {
             reader.beginObject();
@@ -87,14 +90,16 @@ public class Monster
                     case "max_hit": // nullable
                         this.maxHit = reader.nextInt();
                         break;
-                    case "attack_types":
+                    case "attack_type":
                         reader.beginArray();
+                        this.attackStyles = new ArrayList<String>();
                         while (reader.hasNext())
-                            this.attackTypes.add(reader.nextString());
+                            this.attackStyles.add(reader.nextString());
                         reader.endArray();
                         break;
                     case "attributes":
                         reader.beginArray();
+                        this.attributes = new ArrayList<String>();
                         while (reader.hasNext())
                             this.attributes.add(reader.nextString());
                         reader.endArray();
@@ -176,7 +181,7 @@ public class Monster
 
             }
             reader.endObject();
-
+            log.info("Finished creating Monster");
         }
         catch (IOException e)
         {
