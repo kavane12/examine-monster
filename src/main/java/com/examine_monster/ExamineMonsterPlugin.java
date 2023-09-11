@@ -67,26 +67,20 @@ public class ExamineMonsterPlugin extends Plugin
 				&& Arrays.asList(rightClickMenuEntries).stream()
 						.anyMatch(menuEntry -> menuEntry.getOption().equals("Attack")))
 		{
-			lookupMonster(targetNpc.getId(), targetNpc.getName(), targetNpc.getCombatLevel());
+			SwingUtilities.invokeLater(() ->
+			{
+				if (!navButton.isSelected())
+				{
+					navButton.getOnSelect().run();
+				}
+				panel.lookupMonster(targetNpc.getId());
+			});
 		}
-
 	}
 
 	@Provides
 	ExamineMonsterConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(ExamineMonsterConfig.class);
-	}
-
-	private void lookupMonster(int id, String name, int combatLevel)
-	{
-		SwingUtilities.invokeLater(() ->
-		{
-			if (!navButton.isSelected())
-			{
-				navButton.getOnSelect().run();
-			}
-			panel.lookup(id, name, combatLevel);
-		});
 	}
 }

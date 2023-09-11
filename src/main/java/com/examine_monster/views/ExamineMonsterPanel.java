@@ -3,11 +3,11 @@ package com.examine_monster.views;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.examine_monster.ExamineMonsterConfig;
 import com.examine_monster.common.Constants;
+import com.examine_monster.services.OsrsReboxedClient;
 import com.google.inject.Inject;
 
 import net.runelite.client.ui.ColorScheme;
@@ -21,7 +21,7 @@ public class ExamineMonsterPanel extends PluginPanel
 
     // Children of this panel (PluginPanel)
     private IconTextField searchField = new IconTextField();
-    private final JPanel infoPanel = new JPanel();
+    private final MonsterInfoPanel infoPanel = new MonsterInfoPanel();
     private final PluginErrorPanel errorPanel = new PluginErrorPanel();
 
     @Inject
@@ -36,7 +36,6 @@ public class ExamineMonsterPanel extends PluginPanel
         initSearchField();
         add(searchField);
 
-        initInfoPanel();
         add(infoPanel);
 
         initErrorPanel();
@@ -50,12 +49,8 @@ public class ExamineMonsterPanel extends PluginPanel
         searchField.setHoverBackgroundColor(ColorScheme.DARK_GRAY_HOVER_COLOR);
         searchField.setPreferredSize(new Dimension(PluginPanel.PANEL_WIDTH - 20, 30));
         searchField.setMinimumSize(new Dimension(0, 30));
-    }
 
-    private void initInfoPanel()
-    {
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(ColorScheme.DARK_GRAY_COLOR);
+        // TODO implement searching
     }
 
     private void initErrorPanel()
@@ -63,8 +58,11 @@ public class ExamineMonsterPanel extends PluginPanel
         errorPanel.setContent(Constants.PLUGIN_NAME, "Search for a monster or right-click examine one in-game.");
     }
 
-    public void lookup(int id, String name, int combatLevel)
+    public void lookupMonster(int id)
     {
-        errorPanel.setContent("[" + id + "] " + name + " (level-" + combatLevel + ")", "");
+        OsrsReboxedClient.lookupMonster(id).whenCompleteAsync((monster, e) ->
+        {
+            // TODO do something...
+        });
     }
 }
