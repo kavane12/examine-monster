@@ -1,12 +1,14 @@
 package com.examine_monster.views;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.border.EmptyBorder;
 
 import com.examine_monster.ExamineMonsterConfig;
-import com.examine_monster.common.Constants;
+import com.examine_monster.constants.PluginProperties;
 import com.examine_monster.services.OsrsReboxedClient;
 import com.google.inject.Inject;
 
@@ -30,8 +32,8 @@ public class ExamineMonsterPanel extends PluginPanel
         this.config = config;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(new EmptyBorder(10, 10, 10, 10));
         setBackground(ColorScheme.DARK_GRAY_COLOR);
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         initSearchField();
         add(searchField);
@@ -50,19 +52,62 @@ public class ExamineMonsterPanel extends PluginPanel
         searchField.setPreferredSize(new Dimension(PluginPanel.PANEL_WIDTH - 20, 30));
         searchField.setMinimumSize(new Dimension(0, 30));
 
-        // TODO implement searching
+        // TODO: Remove temp listener used for testing.
+        searchField.addKeyListener(
+                new KeyListener()
+                {
+
+                    @Override
+                    public void keyTyped(KeyEvent event)
+                    {
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent event)
+                    {
+                        if (event.getKeyCode() == KeyEvent.VK_ENTER)
+                        {
+                            if (searchField.getText().isBlank())
+                                lookupMonster(8060);
+                            else
+                            {
+                                try
+                                {
+                                    lookupMonster(Integer.valueOf(searchField.getText()));
+                                }
+                                catch (NumberFormatException e)
+                                {
+
+                                }
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent event)
+                    {
+                    }
+
+                }
+
+        );
     }
 
     private void initErrorPanel()
     {
-        errorPanel.setContent(Constants.PLUGIN_NAME, "Search for a monster or right-click examine one in-game.");
+        errorPanel.setContent(PluginProperties.PLUGIN_NAME, "Search for a monster or right-click examine one in-game.");
     }
 
     public void lookupMonster(int id)
     {
-        OsrsReboxedClient.lookupMonster(id).whenCompleteAsync((monster, e) ->
+        OsrsReboxedClient.lookupMonster(id).whenCompleteAsync((monster, error) ->
         {
-            // TODO do something...
+            if (error != null)
+                return;
+
+            errorPanel.setVisible(false);
+            infoPanel.update(monster);
         });
     }
 }
