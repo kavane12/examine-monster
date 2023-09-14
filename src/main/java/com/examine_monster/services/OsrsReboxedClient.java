@@ -12,7 +12,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.inject.Singleton;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -38,7 +37,6 @@ enum Endpoint
 /**
  * Contains methods for accessing OSRS Reboxed's osrsreboxed-db Static JSON API.
  */
-@Slf4j
 @Singleton
 public class OsrsReboxedClient
 {
@@ -72,7 +70,7 @@ public class OsrsReboxedClient
 
             itemsJson$.add(requestGetItemsJson(itemId).thenApply(resultItemJson ->
             {
-                // Add properties found on monsterJson but not itemJson for {@link ItemDrop}.
+                // Add properties found on monsterJson but not itemJson for ItemDrop
                 resultItemJson.addProperty("quantity", quantity);
                 resultItemJson.addProperty("rarity", rarity);
                 return resultItemJson;
@@ -106,7 +104,6 @@ public class OsrsReboxedClient
                 {
                     if (response.isSuccessful() && responseBody != null)
                     {
-
                         JsonObject json = gson.fromJson(responseBody.string(), JsonObject.class);
                         monsterJson$.complete(json);
                     }
@@ -140,7 +137,7 @@ public class OsrsReboxedClient
      */
     private static CompletableFuture<JsonObject> requestGetItemsJson(int itemId)
     {
-        CompletableFuture<JsonObject> itemDropJson$ = new CompletableFuture<>();
+        CompletableFuture<JsonObject> itemJson$ = new CompletableFuture<>();
 
         Request request = new Request.Builder().url(Endpoint.ITEM.url + itemId + ".json").build();
         client.newCall(request).enqueue(new Callback()
@@ -152,13 +149,13 @@ public class OsrsReboxedClient
                     if (response.isSuccessful() && responseBody != null)
                     {
                         JsonObject json = gson.fromJson(responseBody.string(), JsonObject.class);
-                        itemDropJson$.complete(json);
+                        itemJson$.complete(json);
                     }
-                    itemDropJson$.complete(null);
+                    itemJson$.complete(null);
                 }
                 catch (IOException e)
                 {
-                    itemDropJson$.complete(null);
+                    itemJson$.complete(null);
                 }
                 finally
                 {
@@ -168,10 +165,10 @@ public class OsrsReboxedClient
 
             public void onFailure(Call call, IOException e)
             {
-                itemDropJson$.complete(null);
+                itemJson$.complete(null);
             }
         });
 
-        return itemDropJson$;
+        return itemJson$;
     }
 }

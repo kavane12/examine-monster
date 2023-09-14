@@ -2,7 +2,6 @@ package com.examine_monster.common;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,11 +59,10 @@ public class Monster
     int defenseRanged;
 
     // Drops
-    List<ItemDrop> drops;
+    List<Item> drops;
 
     public Monster(JsonObject monsterJson, List<JsonObject> itemsJson)
     {
-        log.info("Creating Monster");
         try (JsonReader reader = new JsonReader(new StringReader(monsterJson.toString())))
         {
             reader.beginObject();
@@ -171,17 +169,15 @@ public class Monster
                         this.defenseRanged = reader.nextInt();
                         break;
                     case "drops":
-                        this.drops = itemsJson.stream().map(itemJson -> new ItemDrop(itemJson)).toList();
+                        this.drops = itemsJson.stream().map(itemJson -> new Item(itemJson)).toList();
                         reader.skipValue();
                         break;
                     default:
                         reader.skipValue();
                         break;
                 }
-
             }
             reader.endObject();
-            log.info("Finished creating Monster");
         }
         catch (IOException e)
         {
