@@ -137,11 +137,16 @@ public class ExamineMonsterPanel extends PluginPanel
 
     public void lookupMonster(int id)
     {
+        searchField.setIcon(IconTextField.Icon.LOADING);
         OsrsReboxedClient.lookupMonster(id).whenCompleteAsync((monster, error) ->
         {
             if (error != null)
+            {
+                searchField.setIcon(IconTextField.Icon.ERROR);
                 return;
+            }
 
+            searchField.setIcon(IconTextField.Icon.SEARCH);
             errorPanel.setVisible(false);
             tabs.setVisible(true);
             tabContent.setVisible(true);
