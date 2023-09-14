@@ -1,6 +1,5 @@
 package com.examine_monster.views;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
@@ -10,8 +9,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import com.examine_monster.ExamineMonsterConfig;
 import com.examine_monster.constants.PluginProperties;
