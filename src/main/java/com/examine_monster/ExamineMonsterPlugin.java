@@ -1,6 +1,7 @@
 package com.examine_monster;
 
-import com.examine_monster.common.Constants;
+import com.examine_monster.constants.Icon;
+import com.examine_monster.constants.PluginProperties;
 import com.examine_monster.views.ExamineMonsterPanel;
 import com.google.inject.Provides;
 
@@ -20,7 +21,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 
-@PluginDescriptor(name = Constants.PLUGIN_NAME, description = "Shows additional information related to a monster on examine")
+@PluginDescriptor(name = PluginProperties.PLUGIN_NAME, description = PluginProperties.PLUGIN_DESCRIPTION)
 public class ExamineMonsterPlugin extends Plugin
 {
 	@Inject
@@ -39,8 +40,8 @@ public class ExamineMonsterPlugin extends Plugin
 	{
 		panel = injector.getInstance(ExamineMonsterPanel.class);
 		navButton = NavigationButton.builder()
-				.tooltip(Constants.PLUGIN_NAME)
-				.icon(Constants.PANEL_BUTTON)
+				.tooltip(PluginProperties.PLUGIN_NAME)
+				.icon(Icon.PLUGIN_BUTTON)
 				.panel(panel)
 				.priority(5)
 				.build();
@@ -73,8 +74,9 @@ public class ExamineMonsterPlugin extends Plugin
 				{
 					navButton.getOnSelect().run();
 				}
-				panel.lookupMonster(targetNpc.getId());
 			});
+
+			panel.lookupMonster(targetNpc.getId());
 		}
 	}
 
