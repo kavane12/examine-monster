@@ -1,11 +1,17 @@
 package com.examine_monster.views;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import com.examine_monster.ExamineMonsterConfig;
 import com.examine_monster.constants.PluginProperties;
@@ -16,15 +22,23 @@ import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.IconTextField;
 import net.runelite.client.ui.components.PluginErrorPanel;
+import net.runelite.client.ui.components.materialtabs.MaterialTab;
+import net.runelite.client.ui.components.materialtabs.MaterialTabGroup;
 
 public class ExamineMonsterPanel extends PluginPanel
 {
     private final ExamineMonsterConfig config;
 
-    // Children of this panel (PluginPanel)
     private IconTextField searchField = new IconTextField();
-    private final MonsterInfoPanel infoPanel = new MonsterInfoPanel();
     private final PluginErrorPanel errorPanel = new PluginErrorPanel();
+
+    private final MonsterInfoPanel infoPanel = new MonsterInfoPanel();
+    private final JPanel dropsPanel = new JPanel();
+
+    private final JPanel tabContent = new JPanel();
+    private final MaterialTabGroup tabs = new MaterialTabGroup(tabContent);
+    private final MaterialTab infoTab = new MaterialTab("Info", tabs, infoPanel);
+    private final MaterialTab dropsTab = new MaterialTab("Drops", tabs, dropsPanel);
 
     @Inject
     ExamineMonsterPanel(ExamineMonsterConfig config)
@@ -38,10 +52,12 @@ public class ExamineMonsterPanel extends PluginPanel
         initSearchField();
         add(searchField);
 
-        add(infoPanel);
-
         initErrorPanel();
         add(errorPanel);
+
+        initTabs();
+        add(tabs);
+        add(tabContent);
     }
 
     private void initSearchField()
@@ -99,6 +115,29 @@ public class ExamineMonsterPanel extends PluginPanel
         errorPanel.setContent(PluginProperties.PLUGIN_NAME, "Search for a monster or right-click examine one in-game.");
     }
 
+    private void initTabs()
+    {
+        tabs.setVisible(false);
+        tabContent.setVisible(false);
+
+        tabs.setLayout(new GridLayout(1, 2, 10, 10));
+        tabs.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        initTab(infoTab);
+        tabs.addTab(infoTab);
+
+        initTab(dropsTab);
+        tabs.addTab(dropsTab);
+    }
+
+    private void initTab(MaterialTab tab)
+    {
+        tab.setOpaque(true);
+        tab.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        tab.setHorizontalAlignment(SwingConstants.CENTER);
+        tab.setVerticalAlignment(SwingConstants.CENTER);
+    }
+
     public void lookupMonster(int id)
     {
         OsrsReboxedClient.lookupMonster(id).whenCompleteAsync((monster, error) ->
@@ -107,6 +146,11 @@ public class ExamineMonsterPanel extends PluginPanel
                 return;
 
             errorPanel.setVisible(false);
+            tabs.setVisible(true);
+            tabContent.setVisible(true);
+
+            tabs.select(infoTab);
+
             infoPanel.update(monster);
         });
     }
