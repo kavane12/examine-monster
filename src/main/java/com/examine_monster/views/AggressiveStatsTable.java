@@ -8,9 +8,9 @@ import com.examine_monster.common.LabeledIcon;
 import com.examine_monster.common.Monster;
 import com.examine_monster.constants.Icon;
 
-public class MonsterAggressiveStatsInfoTable extends InfoTable
+public class AggressiveStatsTable extends InfoTable
 {
-	public MonsterAggressiveStatsInfoTable()
+	public AggressiveStatsTable()
 	{
 		super("Aggressive stats", Icon.ATTACK_ICON_SM);
 	}

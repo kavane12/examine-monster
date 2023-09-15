@@ -12,7 +12,7 @@ import com.examine_monster.common.Monster;
 import com.examine_monster.constants.Icon;
 import com.examine_monster.constants.Npc;
 
-public class MonsterAttributesInfoTable extends InfoTable
+public class AttributesTable extends InfoTable
 {
 	public void update(Monster monster)
 	{

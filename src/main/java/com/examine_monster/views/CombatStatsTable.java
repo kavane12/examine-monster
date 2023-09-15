@@ -8,9 +8,9 @@ import com.examine_monster.common.LabeledIcon;
 import com.examine_monster.common.Monster;
 import com.examine_monster.constants.Icon;
 
-public class MonsterCombatStatsInfoTable extends InfoTable
+public class CombatStatsTable extends InfoTable
 {
-	public MonsterCombatStatsInfoTable()
+	public CombatStatsTable()
 	{
 		super("Combat stats", Icon.COMBAT_ICON);
 	}
