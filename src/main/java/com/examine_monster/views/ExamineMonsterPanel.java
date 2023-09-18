@@ -30,7 +30,7 @@ public class ExamineMonsterPanel extends PluginPanel
     private final PluginErrorPanel errorPanel = new PluginErrorPanel();
 
     private final MonsterInfoPanel infoPanel = new MonsterInfoPanel();
-    private final JPanel dropsPanel = new JPanel();
+    private final MonsterDropsPanel dropsPanel = new MonsterDropsPanel();
 
     private final JPanel tabContent = new JPanel();
     private final MaterialTabGroup tabs = new MaterialTabGroup(tabContent);
@@ -154,6 +154,7 @@ public class ExamineMonsterPanel extends PluginPanel
             tabs.select(infoTab);
 
             infoPanel.update(monster);
+            dropsPanel.update(monster);
         });
     }
 }

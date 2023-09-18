@@ -5,6 +5,7 @@ import com.examine_monster.constants.PluginProperties;
 import com.examine_monster.views.ExamineMonsterPanel;
 import com.google.inject.Provides;
 
+import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
@@ -21,6 +22,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 
+@Slf4j
 @PluginDescriptor(name = PluginProperties.PLUGIN_NAME, description = PluginProperties.PLUGIN_DESCRIPTION)
 public class ExamineMonsterPlugin extends Plugin
 {

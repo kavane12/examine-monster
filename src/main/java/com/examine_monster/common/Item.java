@@ -3,16 +3,20 @@ package com.examine_monster.common;
 import java.io.IOException;
 import java.io.StringReader;
 
+import javax.swing.ImageIcon;
+
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /*
  * A single item drop of a monster;
  */
 @Slf4j
+@Getter
 public class Item
 {
     // Item info
@@ -20,11 +24,12 @@ public class Item
     String name;
     String wikiUrl;
 
-    int highAlchValue;
-    String icon; // base64
+    int geValue;
+    int haValue;
+    ImageIcon icon;
 
     // Drop info
-    String quantity;
+    String quantityStr;
     float rarity;
 
     public Item(JsonObject itemJson)
@@ -51,23 +56,23 @@ public class Item
                         }
                         this.wikiUrl = reader.nextString();
                         break;
-                    case "highalch": // nullable
-                        if (reader.peek() == JsonToken.NULL)
-                        {
-                            reader.skipValue();
-                            this.highAlchValue = 0;
-                            break;
-                        }
-                        this.highAlchValue = reader.nextInt();
-                        break;
+                    // case "highalch": // nullable
+                    // if (reader.peek() == JsonToken.NULL)
+                    // {
+                    // reader.skipValue();
+                    // this.highAlchValue = 0;
+                    // break;
+                    // }
+                    // this.highAlchValue = reader.nextInt();
+                    // break;
                     case "quantity": // nullable
                         if (reader.peek() == JsonToken.NULL)
                         {
-                            this.quantity = "1";
+                            this.quantityStr = "1";
                             reader.skipValue();
                             break;
                         }
-                        this.quantity = reader.nextString();
+                        this.quantityStr = reader.nextString();
                         break;
                     case "rarity":
                         this.rarity = (float) reader.nextDouble();

@@ -10,7 +10,6 @@ import com.examine_monster.common.Monster;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.inject.Singleton;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,9 +36,8 @@ enum Endpoint
 }
 
 /**
- * Contains methods for accessing OSRS Reboxed's osrsreboxed-db Static JSON API.
+ * Contains static methods for accessing osrsreboxed-db Static JSON API.
  */
-@Singleton
 public class OsrsReboxedClient
 {
     public static final OkHttpClient client = new OkHttpClient();

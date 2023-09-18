@@ -21,10 +21,10 @@ public class MonsterInfoPanel extends JPanel
     private final JLabel nameLabel = new JLabel();
     private final JLabel attributesLabel = new JLabel();
     private final JLabel attackStylesLabel = new JLabel();
-    private final MonsterAttributesInfoTable combatAttributesTable = new MonsterAttributesInfoTable();
-    private final MonsterCombatStatsInfoTable combatStatsTable = new MonsterCombatStatsInfoTable();
-    private final MonsterAggressiveStatsInfoTable aggressiveStatsTable = new MonsterAggressiveStatsInfoTable();
-    private final MonsterDefensiveStatsInfoTable defensiveStatsTable = new MonsterDefensiveStatsInfoTable();
+    private final AttributesTable combatAttributesTable = new AttributesTable();
+    private final CombatStatsTable combatStatsTable = new CombatStatsTable();
+    private final AggressiveStatsTable aggressiveStatsTable = new AggressiveStatsTable();
+    private final DefensiveStatsTable defensiveStatsTable = new DefensiveStatsTable();
 
     public MonsterInfoPanel()
     {
