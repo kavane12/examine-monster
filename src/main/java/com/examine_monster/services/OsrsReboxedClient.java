@@ -1,14 +1,9 @@
 package com.examine_monster.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
-import com.examine_monster.common.Monster;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import okhttp3.Call;
@@ -18,71 +13,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-enum Endpoint
-{
-    MONSTER("monsters-json/"),
-    ITEM("items-json/"),
-    ITEMS("items-complete"),
-    ITEM_ICON("items-icons/");
-
-
-    public static final String OSRS_REBOXED_BASE_URL = "https://raw.githubusercontent.com/0xNeffarion/osrsreboxed-db/master/docs/";
-    public final String url;
-
-    private Endpoint(String url)
-    {
-        this.url = OSRS_REBOXED_BASE_URL + url;
-    }
-}
-
 /**
  * Contains static methods for accessing osrsreboxed-db Static JSON API.
  */
 public class OsrsReboxedClient
 {
+    private static final String MONSTER_URL = "https://raw.githubusercontent.com/0xNeffarion/osrsreboxed-db/master/docs/monsters-json/";
+    private static final String ITEM_URL = "https://raw.githubusercontent.com/0xNeffarion/osrsreboxed-db/master/docs/items-json/";
+
     public static final OkHttpClient client = new OkHttpClient();
     public static final Gson gson = new Gson();
-
-    /**
-     * Looks up a monster by its id and returns it.
-     *
-     * @param monsterId
-     *            the id of the monster
-     * @return a {@link CompletableFuture} of {@link Monster}.
-     */
-    public static CompletableFuture<Monster> lookupMonster(int id)
-    {
-        return requestGetMonsterJson(id)
-                .thenCompose(monsterJson -> getItemsJson(monsterJson)
-                        .thenApply(itemsJson -> new Monster(monsterJson, itemsJson)));
-    }
-
-    private static CompletableFuture<List<JsonObject>> getItemsJson(JsonObject monsterJson)
-    {
-        List<CompletableFuture<JsonObject>> itemsJson$ = new ArrayList<>();
-
-        for (JsonElement itemJsonEle : monsterJson.get("drops").getAsJsonArray())
-        {
-            JsonObject itemJsonObj = itemJsonEle.getAsJsonObject();
-            int itemId = itemJsonObj.get("id").getAsInt();
-            String quantity = itemJsonObj.get("quantity").getAsString();
-            float rarity = itemJsonObj.get("rarity").getAsFloat();
-
-            itemsJson$.add(requestGetItemsJson(itemId).thenApply(resultItemJson ->
-            {
-                // Add properties found on monsterJson but not itemJson for ItemDrop
-                resultItemJson.addProperty("quantity", quantity);
-                resultItemJson.addProperty("rarity", rarity);
-                return resultItemJson;
-            }));
-        }
-
-        return CompletableFuture.allOf(itemsJson$.toArray(new CompletableFuture<?>[0]))
-                .thenApply(v -> itemsJson$.stream()
-                        .map(CompletableFuture::join)
-                        .collect(Collectors.toList()));
-
-    }
 
     /**
      * Get request on osrsreboxed-db to fetch the specified monster by id.
@@ -91,11 +31,11 @@ public class OsrsReboxedClient
      *            the id of the monster
      * @return a {@link CompletableFuture} of the monster {@code JSON}.
      */
-    private static CompletableFuture<JsonObject> requestGetMonsterJson(int monsterId)
+    public static CompletableFuture<JsonObject> requestGetMonsterJson(int monsterId)
     {
         CompletableFuture<JsonObject> monsterJson$ = new CompletableFuture<>();
 
-        Request request = new Request.Builder().url(Endpoint.MONSTER.url + monsterId + ".json").build();
+        Request request = new Request.Builder().url(MONSTER_URL + monsterId + ".json").build();
         client.newCall(request).enqueue(new Callback()
         {
             public void onResponse(Call call, Response response)
@@ -135,11 +75,11 @@ public class OsrsReboxedClient
      *            the id of the item
      * @return a {@link CompletableFuture} of the item {@code JSON}.
      */
-    private static CompletableFuture<JsonObject> requestGetItemsJson(int itemId)
+    public static CompletableFuture<JsonObject> requestGetItemJson(int itemId)
     {
         CompletableFuture<JsonObject> itemJson$ = new CompletableFuture<>();
 
-        Request request = new Request.Builder().url(Endpoint.ITEM.url + itemId + ".json").build();
+        Request request = new Request.Builder().url(ITEM_URL + itemId + ".json").build();
         client.newCall(request).enqueue(new Callback()
         {
             public void onResponse(Call call, Response response)

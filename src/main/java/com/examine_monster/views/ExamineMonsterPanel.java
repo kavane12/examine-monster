@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 
 import com.examine_monster.ExamineMonsterConfig;
 import com.examine_monster.constants.PluginProperties;
+import com.examine_monster.services.DataClient;
 import com.examine_monster.services.OsrsReboxedClient;
 import com.google.inject.Inject;
 
@@ -138,7 +139,7 @@ public class ExamineMonsterPanel extends PluginPanel
     public void lookupMonster(int id)
     {
         searchField.setIcon(IconTextField.Icon.LOADING);
-        OsrsReboxedClient.lookupMonster(id).whenCompleteAsync((monster, error) ->
+        DataClient.lookupMonster(id).whenCompleteAsync((monster, error) ->
         {
             if (error != null)
             {

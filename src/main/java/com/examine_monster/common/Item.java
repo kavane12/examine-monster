@@ -24,12 +24,12 @@ public class Item
     String name;
     String wikiUrl;
 
-    int geValue;
-    int haValue;
+    String geValue;
+    String haValue;
     ImageIcon icon;
 
     // Drop info
-    String quantityStr;
+    String quantity;
     float rarity;
 
     public Item(JsonObject itemJson)
@@ -51,28 +51,37 @@ public class Item
                         if (reader.peek() == JsonToken.NULL)
                         {
                             reader.skipValue();
-                            this.wikiUrl = "";
+                            this.wikiUrl = null;
                             break;
                         }
                         this.wikiUrl = reader.nextString();
                         break;
-                    // case "highalch": // nullable
-                    // if (reader.peek() == JsonToken.NULL)
-                    // {
-                    // reader.skipValue();
-                    // this.highAlchValue = 0;
-                    // break;
-                    // }
-                    // this.highAlchValue = reader.nextInt();
-                    // break;
+                    case "ge_value": // nullable
+                        if (reader.peek() == JsonToken.NULL)
+                        {
+                            reader.skipValue();
+                            this.geValue = "Not sold";
+                            break;
+                        }
+                        this.geValue = reader.nextString();
+                        break;
+                    case "ha_value": // nullable
+                        if (reader.peek() == JsonToken.NULL)
+                        {
+                            reader.skipValue();
+                            this.haValue = "N/A";
+                            break;
+                        }
+                        this.haValue = reader.nextString();
+                        break;
                     case "quantity": // nullable
                         if (reader.peek() == JsonToken.NULL)
                         {
-                            this.quantityStr = "1";
+                            this.quantity = "1";
                             reader.skipValue();
                             break;
                         }
-                        this.quantityStr = reader.nextString();
+                        this.quantity = reader.nextString();
                         break;
                     case "rarity":
                         this.rarity = (float) reader.nextDouble();
